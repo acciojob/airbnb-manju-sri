@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class HotelManagementRepository {
@@ -29,16 +30,17 @@ public class HotelManagementRepository {
        return null;
     }
 
-    public void saveUser(User user) {
-        userDb.put(user.getaadharCardNo(),user);
+    public Integer saveUser(User user) {
+       userDb.put(user.getaadharCardNo(),user);
+       return user.getaadharCardNo();
     }
 
-    public List<Hotel> getListOfHotel() {
-        ArrayList<Hotel> hotelList = new ArrayList<>();
+    public HashMap<String, Hotel> getListOfHotel() {
+      /*  ArrayList<Hotel> hotelList = new ArrayList<>();
         for (Hotel hotelName: hotelDb.values()) {
-            hotelList.add(hotelName);
-        }
-        return hotelList;
+            hotelList.add( hotelName);
+        } */
+        return hotelDb;
     }
 
     public void bookARoomAndSave(Booking booking) {
@@ -60,7 +62,7 @@ public class HotelManagementRepository {
     }
 
     public boolean isHotelExist(Hotel hotel) {
-        return hotelDb.containsKey(hotel);
+        return hotelDb.containsKey(hotel.getHotelName());
     }
 
     public Hotel getHotelByBooking(Booking booking) {

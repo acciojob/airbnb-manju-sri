@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequestMapping("/hotel")
 public class HotelManagementController {
     @Autowired
-    HotelManagementService hotelManagementService;
+    HotelManagementService hotelManagementService = new HotelManagementService();
     @PostMapping("/add-hotel")
     public String addHotel(@RequestBody Hotel hotel){
         String response = hotelManagementService.addHotel(hotel);
@@ -36,11 +36,11 @@ public class HotelManagementController {
 
     @PostMapping("/add-user")
     public Integer addUser(@RequestBody User user){
-       hotelManagementService.addUser(user);
+       Integer aadharNo = hotelManagementService.addUser(user);
         //You need to add a User Object to the database
         //Assume that user will always be a valid user and return the aadharCardNo of the user
 
-       return user.getaadharCardNo();
+       return aadharNo;
     }
 
     @GetMapping("/get-hotel-with-most-facilities")

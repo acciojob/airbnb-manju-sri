@@ -5,15 +5,14 @@ import com.driver.model.Facility;
 import com.driver.model.Hotel;
 import com.driver.model.User;
 import com.driver.repository.HotelManagementRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class HotelManagementService {
-    @Autowired
-    HotelManagementRepository hotelManagementRepository;
+
+    HotelManagementRepository hotelManagementRepository = new HotelManagementRepository();
 
     public String addHotel(Hotel hotel) {
 
@@ -27,24 +26,32 @@ public class HotelManagementService {
         return "SUCCESS";
     }
 
-    public void addUser(User user) {
-        hotelManagementRepository.saveUser(user);
+    public Integer addUser(User user) {
+       return hotelManagementRepository.saveUser(user);
     }
 
     public String getHotelWithMostFacilities() {
 
-        List<Hotel> hotelList =  hotelManagementRepository.getListOfHotel();
+     //   List<Hotel> hotelList =  hotelManagementRepository.getListOfHotel();
+
+        HashMap<String, Hotel> hotelDb = hotelManagementRepository.getListOfHotel();
+        List<String> hotelList = new ArrayList<>();
+
+        for (String hotel : hotelDb.keySet()){
+            hotelList.add(hotel);
+        }
+
         int maxFacilities =0;
         String hotelWithMostFacilities= "";
 
-        for (Hotel hotel: hotelList){
-           int numberOfFacilities = hotel.getFacilities().size();
+        for (String hotel: hotelDb.keySet() ){
+           int numberOfFacilities = hotelDb.get(hotel).getFacilities().size();
            if(numberOfFacilities>maxFacilities){
                maxFacilities = numberOfFacilities;
-               hotelWithMostFacilities = hotel.getHotelName();
+               hotelWithMostFacilities = hotelDb.get(hotel).getHotelName();
            }
-           else if (numberOfFacilities==maxFacilities && hotel.getHotelName().compareTo(hotelWithMostFacilities)<0){
-               hotelWithMostFacilities= hotel.getHotelName();
+           else if (numberOfFacilities==maxFacilities && hotelDb.get(hotel).getHotelName().compareTo(hotelWithMostFacilities)<0){
+               hotelWithMostFacilities= hotelDb.get(hotel).getHotelName();
            }
         }
         return hotelWithMostFacilities.isEmpty()?"":hotelWithMostFacilities;
